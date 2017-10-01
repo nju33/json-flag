@@ -23,7 +23,10 @@ Prepare `.json` (strictly json5). For example, create it as `example.json`,
     "foo",
     "bar",
     "baz"
-  ]
+  ],
+	"object": {
+		"foo": "bar"
+	}
 }
 
 ```
@@ -33,4 +36,10 @@ Pass this `.json` to the command. Then,
 ```bash
 json-flag ./example.json
 # --string foo --number 1 --array-string foo,bar,baz
+```
+
+## Help
+
+```bash
+json-flag --help
 ```
