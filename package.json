@@ -12,6 +12,10 @@
   "lint-staged": {
     "*.ts": "typescript"
   },
+  "bin": {
+    "json-flag": "./json-flag.js"
+  },
+  "repository": "nju33/json-lag",
   "devDependencies": {
     "@types/chalk": "^0.4.31",
     "@types/json5": "^0.0.29",
