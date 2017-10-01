@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "precommit": "lint-staged",
-    "prepublish": "tsc -p .",
+    "prepare": "tsc -p .",
     "typescript": "tsc --target es6 --module commonjs --lib es2016,es2017,es2017.object"
   },
   "lint-staged": {
