@@ -28,6 +28,11 @@ async function runProcess(): Promise<never | void> {
       description: 'Number of hyphen to be added before flag',
       type: 'number',
     })
+    .option('json-path', {
+      alias: 'p',
+      description: 'Path to target',
+      type: 'string',
+    })
     .usage('$ json-flag [options] <jsonfilepath>\nConvert json to cli\'s flag')
     .help().argv;
 
@@ -41,13 +46,26 @@ async function runProcess(): Promise<never | void> {
   const {
     case: stringCase,
     hyphenLength,
-  }: {case: string; hyphenLength: number} = argv as any;
+    jsonPath,
+  }: {case: string; hyphenLength: number, jsonPath: string | undefined} = argv as any;
   const hyphen = Array<string>(hyphenLength)
     .fill('-')
     .join('');
   const transform = (Case as any)[stringCase].bind(Case);
   const content = await readFile(path.resolve(filepath));
-  const data = JSON5.parse(content);
+  const data = (() => {
+    const json = JSON5.parse(content);
+    if (jsonPath === undefined) {
+      return json;
+    }
+    return json[jsonPath];
+  })();
+
+  if (typeof data === 'undefined') {
+    // tslint:disable-next-line no-console
+    console.error(chalk.red('there is no data'));
+    process.exit(1);
+  }
 
   const formatted: string = Object.entries(
     data,
@@ -62,6 +80,12 @@ async function runProcess(): Promise<never | void> {
     acc += ' ';
     return acc;
   }, '');
+
+  if (formatted.trim() === '') {
+    // tslint:disable-next-line no-console
+    console.error(chalk.red('There was no flag'));
+    process.exit(1);
+  }
 
   process.stdout.write(formatted);
 }
