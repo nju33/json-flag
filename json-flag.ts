@@ -17,7 +17,6 @@ async function runProcess(): Promise<never | void> {
   const argv = yargs
     .option('case', {
       alias: 'c',
-      default: 'kebab',
       description:
         'Specify a string case #ref » https://github.com/nbubna/Case#code-helpers',
       type: 'string',
@@ -33,7 +32,8 @@ async function runProcess(): Promise<never | void> {
       description: 'Path to target',
       type: 'string',
     })
-    .usage('$ json-flag [options] <jsonfilepath>\nConvert json to cli\'s flag')
+    // tslint:disable-next-line quotemark
+    .usage("$ json-flag [options] <jsonfilepath>\nConvert json to cli's flag")
     .help().argv;
 
   if (argv._.length === 0) {
@@ -47,11 +47,27 @@ async function runProcess(): Promise<never | void> {
     case: stringCase,
     hyphenLength,
     jsonPath,
-  }: {case: string; hyphenLength: number, jsonPath: string | undefined} = argv as any;
+  }: {
+    case?: 'snake' | 'pascal' | 'kebab' | 'camel' | 'header' | 'constant';
+    hyphenLength: number;
+    jsonPath?: string;
+  } = argv as any;
   const hyphen = Array<string>(hyphenLength)
     .fill('-')
     .join('');
-  const transform = (Case as any)[stringCase].bind(Case);
+  const transform = (() => {
+    if (typeof stringCase === 'undefined') {
+      return (str: string) => str;
+    }
+    if (!(Case as any)[stringCase]) {
+      // tslint:disable-next-line no-console
+      console.error(
+        chalk.red(`Specify 'snake' | 'pascal' | 'kebab' | 'camel' | 'header' | 'constant' for case`),
+      );
+      process.exit(1);
+    }
+    return (Case as any)[stringCase].bind(Case);
+  })();
   const content = await readFile(path.resolve(filepath));
   const data = (() => {
     const json = JSON5.parse(content);
