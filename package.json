@@ -1,7 +1,7 @@
 {
   "name": "json-flag",
   "description": "Convert json to cli's flag",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "json-flag.js",
   "license": "MIT",
   "scripts": {
