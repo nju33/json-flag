@@ -1,0 +1,9 @@
+{
+  "string": "foo",
+  "number": 1,
+  "array-string": [
+    "foo",
+    "bar",
+    "baz"
+  ]
+}
