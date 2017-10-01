@@ -52,8 +52,10 @@ async function runProcess(): Promise<never | void> {
   const formatted: string = Object.entries(
     data,
   ).reduce((acc, [flag, value]) => {
-    if (Array.isArray(value)) {
-      acc += `${hyphen}${transform(flag)} ${value.join(',')}`;
+    if (typeof value === 'object') {
+      if (Array.isArray(value)) {
+        acc += `${hyphen}${transform(flag)} ${value.join(',')}`;
+      }
     } else {
       acc += `${hyphen}${transform(flag)} ${value}`;
     }
