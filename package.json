@@ -7,10 +7,15 @@
   "scripts": {
     "precommit": "lint-staged",
     "prepare": "tsc -p .",
-    "typescript": "tsc --target es6 --module commonjs --lib es2016,es2017,es2017.object"
+    "test": "tslint",
+    "typescript": "tsc --target es6 --module commonjs --lib es2016,es2017,es2017.object",
+    "tslint": "tslint -p ."
   },
   "lint-staged": {
-    "*.ts": "typescript"
+    "*.ts": [
+      "typescript",
+      "tslint"
+    ]
   },
   "bin": {
     "json-flag": "./json-flag.js"
